@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Order_Pizza_Management.UserControlNewOrder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Order_Pizza_Management"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
+            <Grid>
+                <UniformGrid Grid.Row="0" Rows="1" Columns="2">
+                    <Button x:Name="MenuButton"  Margin="5 5" Background="#727077" BorderBrush="{x:Null}" Click="MenuButton_Click">
+                        Меню
+                        <Button.ToolTip>
+                            Перейти к выбору из доступных сформированных пицц
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="CustomButton" Margin="4 4" Background="#727077" BorderBrush="{x:Null}" Click="CustomButton_Click">
+                        Пользовательская пицца
+                        <Button.ToolTip>
+                            Перейти к сбору пиццы из доступных ингредиентов
+                        </Button.ToolTip>
+                    </Button>
+                </UniformGrid>
+
+                <Grid Grid.Row="1">
+                    <Grid x:Name="ContentContainer" Grid.Column="0" Background="White" Margin="4">
+
+                    </Grid>
+                    <Grid Grid.Column="1" Background="#727077" Margin="4">
+                        <TextBlock Grid.Row="0" Text="Ваш заказ" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="0,10,0,20" HorizontalAlignment="Center" Foreground="White"/>
+                        <Grid Grid.Row="1">
+                            <TextBlock Grid.Column="0" Text="Тут будут строки заказа..." FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20" Foreground="White"/>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <TextBlock Grid.Column="0" Text="Итоговый счет" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20" Foreground="White"/>
+                            <TextBlock Grid.Column="2" Text="777" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20" Foreground="White"/>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                        <Button x:Name="FinishButton" Grid.Row="3" BorderBrush="{x:Null}" Margin="4 4" Background="#E99787" Click="FinishButton_Click">
+                            Завершить
+                            <Button.ToolTip>
+                                Перейти к заполнению данных о заказе
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+            </Grid>
+        </materialDesign:TransitioningContent>
+    </Grid>
+</UserControl>

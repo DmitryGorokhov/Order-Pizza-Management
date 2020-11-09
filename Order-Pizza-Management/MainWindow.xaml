@@ -1,0 +1,75 @@
+﻿<Window x:Class="Order_Pizza_Management.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Order_Pizza_Management"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Height="600" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" WindowStyle="None">
+    <Grid Background="#A49592" MouseDown="Grid_MouseDown">
+        <StackPanel VerticalAlignment="Top">
+            <Grid Background="#727077" Height="10"/>
+            <Grid Margin="5">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text="Управление заказом пиццы" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20 0" Foreground="White"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
+                    <Button x:Name="CloseButton" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="White" Click="CloseButton_Click">
+                        <materialDesign:PackIcon Kind="Power"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <Grid Margin="0,51,0.246,-0.369">
+            <Grid Grid.Column="0" Background="#727077" Margin="4">
+                <Grid Grid.Row="0" Margin="16 0 24 0">
+                    <Image Grid.Column="0" Source="Resourses/pizza.png"/>
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 8 0 0">
+                        <TextBlock Text="1-ая" HorizontalAlignment="Right" FontSize="18" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White"/>
+                        <TextBlock Text="Пиццерия" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <StackPanel Grid.Row="1">
+                    <Button x:Name="OrderButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="OrderButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Pizza" VerticalAlignment="Center" Margin="4"/>
+                            <TextBlock Text="Заказ" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ContolButton" Background="#E99787" BorderBrush="{x:Null}"  Margin="24 12" Click="ContolButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="4"/>
+                            <TextBlock Text="Управление" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ReportButton" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Click="ReportButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="File" VerticalAlignment="Center" Margin="4"/>
+                            <TextBlock Text="Отчеты" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+            </Grid>
+            <Grid x:Name="ContentGrid" Grid.Column="1">
+                <local:UserControlNewOrder />
+            </Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*">
+                </ColumnDefinition>
+                <ColumnDefinition Width="3*">
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </Grid>
+</Window>
