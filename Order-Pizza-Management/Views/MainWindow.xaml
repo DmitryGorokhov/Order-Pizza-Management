@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Order_Pizza_Management"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d" Height="600" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" WindowStyle="None">
     <Grid Background="#A49592" MouseDown="Grid_MouseDown">
         <StackPanel VerticalAlignment="Top">
@@ -14,7 +15,7 @@
                     <TextBlock Text="Управление заказом пиццы" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20 0" Foreground="White"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
-                    <Button x:Name="CloseButton" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="White" Click="CloseButton_Click">
+                    <Button Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="White" Click="CloseButton_Click">
                         <materialDesign:PackIcon Kind="Power"/>
                     </Button>
                 </StackPanel>
@@ -23,7 +24,7 @@
         <Grid Margin="0,51,0.246,-0.369">
             <Grid Grid.Column="0" Background="#727077" Margin="4">
                 <Grid Grid.Row="0" Margin="16 0 24 0">
-                    <Image Grid.Column="0" Source="Resourses/pizza.png"/>
+                    <!--<Image Grid.Column="0" Source="Resourses/pizza.png"/>-->
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 8 0 0">
                         <TextBlock Text="1-ая" HorizontalAlignment="Right" FontSize="18" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White"/>
                         <TextBlock Text="Пиццерия" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White"/>
@@ -61,7 +62,155 @@
                 </Grid.RowDefinitions>
             </Grid>
             <Grid x:Name="ContentGrid" Grid.Column="1">
-                <local:UserControlNewOrder />
+                <Grid x:Name="OrderingGrid">
+                    <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
+                        <Grid>
+                            <UniformGrid Grid.Row="0" Rows="1" Columns="2">
+                                <Button Content="Меню"  Margin="5 5" Background="#727077" BorderBrush="{x:Null}" Click="MenuButton_Click">
+                                    <Button.ToolTip>
+                                        Перейти к выбору из доступных сформированных пицц
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="Пользовательская пицца" Margin="4 4" Background="#727077" BorderBrush="{x:Null}" Click="CustomButton_Click">
+                                    <Button.ToolTip>
+                                        Перейти к сбору пиццы из доступных ингредиентов
+                                    </Button.ToolTip>
+                                </Button>
+                            </UniformGrid>
+
+                            <Grid Grid.Row="1">
+                                <ScrollViewer>
+                                    <Grid x:Name="ContentContainer" Grid.Column="0" Background="White" Margin="4">
+                                        <Grid>
+                                            <Grid x:Name="MenuGrid" Visibility="Visible">
+                                                <StackPanel>
+                                                    <ListBox ItemsSource="{Binding allPizza}"
+                                                    SelectedItem="{Binding selectedPizza}">
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Margin="4">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock Margin="4" FontSize="14" Text="{Binding Path=Name}" />
+                                                                        <TextBlock Margin="4" FontSize="14" Text="Стоимость:" />
+                                                                        <TextBlock Margin="0 4" FontSize="14" Text="{Binding Path=Price}" />
+                                                                    </StackPanel>
+                                                                    <TextBlock Margin="4" FontSize="12" Text="{Binding Path=Description}" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Margin="10" FontSize="14" Text="Количество" />
+                                                        <xctk:IntegerUpDown x:Name="pizzaCount" Margin="4" Width="60" Height="30" Value="{Binding Count}" Minimum="1"/>
+                                                        <Button Content="Добавить" Margin="4" Background="#727077" BorderBrush="{x:Null}">
+                                                            <Button.ToolTip>Добавить выбранную пиццу</Button.ToolTip>
+                                                        </Button>
+                                                        <Button Content="Завершить" Margin="4" Background="#727077" BorderBrush="{x:Null}">
+                                                            <Button.ToolTip>Завершить создание заказа</Button.ToolTip>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                            <Grid x:Name="CustomGrid" Visibility="Hidden">
+                                                <StackPanel>
+                                                    <ListBox ItemsSource="{Binding shownIngredients}"
+                                                    SelectedItem="{Binding SelectedIngridient}" 
+                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="450">
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel>
+                                                                    <TextBlock FontSize="12" Margin="4" Text="{Binding Path=IngredientType.Value}" />
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock FontSize="14" Margin="4" Text="{Binding Path=Name}" />
+                                                                        <TextBlock FontSize="14" Margin="4" Text="Цена: " />
+                                                                        <TextBlock FontSize="14" Margin="0 4" Text="{Binding Path=Price}" />
+                                                                    </StackPanel>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Margin="10" FontSize="14" Text="Количество" />
+                                                        <xctk:IntegerUpDown x:Name="Count" Width="60" Height="30" Value="{Binding selectedCount}" Minimum="1"/>
+                                                        <Button Content="Добавить" Margin="4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding AddIngredientInPizza}">
+                                                            <Button.ToolTip>Добавить выбранный ингредиент</Button.ToolTip>
+                                                        </Button>
+                                                        <Button Content="Завершить" Margin="4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding AddCustomPizza}">
+                                                            <Button.ToolTip>Завершить создание пиццы</Button.ToolTip>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollViewer>
+                            <Grid Grid.Column="1" Background="#727077" Margin="4">
+                                    <TextBlock Grid.Row="0" Text="Ваш заказ" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="0,10,0,20" HorizontalAlignment="Center" Foreground="White"/>
+                                    <Grid Grid.Row="1">
+                                        <TextBlock Grid.Column="0" Text="Тут будут строки заказа..." FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20" Foreground="White"/>
+                                        <!--<ListBox ItemsSource="{Binding orderString}"
+                                        SelectedItem="{Binding SelectedPizza}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Margin="4">
+                                                        <StackPanel Orientation="Vertical">
+                                                            <TextBlock FontSize="14" Text="{Binding Path=Name}" />
+                                                            <TextBlock FontSize="14" Text="{Binding Path=Cost}" />
+                                                            -->
+                                        <!--upDown-->
+                                        <!--
+                                                            <Button Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}"
+                                                                Command="{Binding AddPizzaInOrder}">
+                                                                <materialDesign:PackIcon Kind="Plus"/>
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <TextBlock Text="{Binding Path=Description}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>-->
+                                    </Grid>
+                                    <Grid Grid.Row="2">
+                                        <TextBlock Grid.Column="0" Text="Итоговый счет" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20" Foreground="White"/>
+                                        <TextBlock Grid.Column="2" Text="777" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20" Foreground="White"/>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                    </Grid>
+                                    <!--<Button x:Name="FinishButton" Grid.Row="3" BorderBrush="{x:Null}" Margin="4 4" Background="#E99787" Click="FinishButton_Click">
+                                        Завершить
+                                        <Button.ToolTip>
+                                            Перейти к заполнению данных о заказе
+                                        </Button.ToolTip>
+                                    </Button>-->
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                </Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </materialDesign:TransitioningContent>
+                </Grid>
+                <Grid x:Name="NoNameGrid" Visibility = "Hidden">
+
+                </Grid>
             </Grid>
 
             <Grid.ColumnDefinitions>
