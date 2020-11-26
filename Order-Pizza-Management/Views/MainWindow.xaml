@@ -23,42 +23,42 @@
         </StackPanel>
         <Grid Margin="0,51,0.246,-0.369">
             <Grid Grid.Column="0" Background="#727077" Margin="4">
-                <Grid Grid.Row="0" Margin="16 0 24 0">
-                    <!--<Image Grid.Column="0" Source="Resourses/pizza.png"/>-->
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 8 0 0">
-                        <TextBlock Text="1-ая" HorizontalAlignment="Right" FontSize="18" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White"/>
-                        <TextBlock Text="Пиццерия" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White"/>
-                    </StackPanel>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
-                <StackPanel Grid.Row="1">
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="1-ая Пиццерия" HorizontalAlignment="Center" FontSize="18" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White" VerticalAlignment="Center"/>
                     <Button x:Name="OrderButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="OrderButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Pizza" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Заказ" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ContolButton" Background="#E99787" BorderBrush="{x:Null}"  Margin="24 12" Click="ContolButton_Click">
+                    <Button x:Name="ContolButton" Visibility="Hidden" Background="#E99787" BorderBrush="{x:Null}"  Margin="24 12" Click="ContolButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Управление" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ReportButton" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Click="ReportButton_Click">
+                    <Button x:Name="ReportButton" Visibility="Hidden" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Click="ReportButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="File" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Отчеты" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button x:Name="EnterButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="EnterButton_Click">
+                            <TextBlock Text="Вход админисратора" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                    </Button>
+                    <StackPanel x:Name="LogoutPanel" Visibility="Hidden">
+                        <TextBlock Text="Вы вошли как Админисратор" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0" HorizontalAlignment="Center" Foreground="White"/>
+                        <Button x:Name="ExitButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="ExitButton_Click">
+                                <TextBlock Text="Выйти" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="4*"/>
                 </Grid.RowDefinitions>
             </Grid>
             <Grid x:Name="ContentGrid" Grid.Column="1">

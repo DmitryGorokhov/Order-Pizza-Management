@@ -69,9 +69,9 @@ namespace Order_Pizza_Management.ViewModels
             orderCost = 0;
 
             allIngredients = dbo.GetAvailableIngredients();
-            shownIngredients = allIngredients.ToList();
+            shownIngredients = new ObservableCollection<Ingredient>(allIngredients.ToList());
             allPizza = dbo.GetAvailablePizza();
-            shownPizza = allPizza.ToList();
+            shownPizza = new ObservableCollection<Pizza>(allPizza.ToList());
             Types = dbo.GetIngredientTypes();
             selectedType = Types.Last();
 
@@ -190,8 +190,8 @@ namespace Order_Pizza_Management.ViewModels
                 orderStrings.Add(os);
             }
             UpdateIngredientsCount(pizza.Id, count);
-            shownPizza = allPizza.Select(i => i).Where(i => i.InStock == true).ToList();
-            shownIngredients = allIngredients.Select(i => i).Where(i => i.InStock).ToList();
+            shownPizza = new ObservableCollection<Pizza>(allPizza.Select(i => i).Where(i => i.InStock == true).ToList());
+            shownIngredients = new ObservableCollection<Ingredient>(allIngredients.Select(i => i).Where(i => i.InStock).ToList());
             orderCost += pizza.Price * count;
         }
         private void UpdateIngredientsCount(int pizzaId, int count)

@@ -63,5 +63,22 @@ namespace Order_Pizza_Management
             MenuGrid.Visibility = Visibility.Hidden;
         }
 
+        private void EnterButton_Click(object sender, RoutedEventArgs e)
+        {
+            OrderButton.Visibility = Visibility.Hidden;
+            ContolButton.Visibility = Visibility.Visible;
+            ReportButton.Visibility = Visibility.Visible;
+            EnterButton.Visibility = Visibility.Hidden;
+            LogoutPanel.Visibility = Visibility.Visible;
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            OrderButton.Visibility = Visibility.Visible;
+            ContolButton.Visibility = Visibility.Hidden;
+            ReportButton.Visibility = Visibility.Hidden;
+            EnterButton.Visibility = Visibility.Visible;
+            LogoutPanel.Visibility = Visibility.Hidden;
+        }
     }
 }
