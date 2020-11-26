@@ -49,5 +49,21 @@ namespace Order_Pizza_Management.Models
             return cs.Id;
         }
 
+        public List<int> GetIngredientsIdByPizzaId(int pizzaId)
+        {
+            return db.PizzaCompositionString
+                .Where(c => c.Pizza_FK == pizzaId)
+                .Select(c => c.Ingredient_FK)
+                .ToList();
+        }
+
+        public List<int> GetPizzasIdByIngredientId(int ingrId)
+        {
+            return db.PizzaCompositionString
+                .Where(c => c.Ingredient_FK == ingrId)
+                .Select(c => c.Pizza_FK)
+                .ToList();
+        }
+
     }
 }
