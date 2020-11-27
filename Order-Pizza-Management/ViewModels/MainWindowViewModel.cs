@@ -11,21 +11,50 @@ namespace Order_Pizza_Management.ViewModels
 {
     class MainWindowViewModel : INotifyPropertyChanged
     {
-        public int selectedCount { get; set; }
-        public double orderCost { get; set; }
+        private double cpizzaCost;
+        public double CustomPizzaCost
+        {
+            get { return cpizzaCost; }
+            set
+            {
+                cpizzaCost = value;
+                OnPropertyChanged("CustomPizzaCost");
+            }
+        }
 
-        public ObservableCollection<Pizza> allPizza { get; set; }
+        private int selectedCount;
+        public int SelectedCount
+        {
+            get { return selectedCount; }
+            set
+            {
+                selectedCount = value;
+                OnPropertyChanged("SelectedCount");
+            }
+        }
+
+        private double orderCost;
+        public double OrderCost
+        {
+            get { return orderCost; }
+            set
+            {
+                orderCost = value;
+                OnPropertyChanged("OrderCost");
+            }
+        }
+
+        private ObservableCollection<Pizza> allPizza { get; set; }
         public ObservableCollection<Pizza> shownPizza { get; set; }
+
         private ObservableCollection<Ingredient> allIngredients;
         public ObservableCollection<Ingredient> shownIngredients { get; set; }
+
         public ObservableCollection<OrderString> orderStrings { get; set; }
         public ObservableCollection<PizzaCompositionString> composition { get; set; }
         public ObservableCollection<IngredientType> Types { get; set; }
 
         private Pizza selectedPizza;
-        private Ingredient selectedIngridient;
-        private IngredientType selectedType;
-
         public Pizza SelectedPizza
         {
             get { return selectedPizza; }
@@ -35,6 +64,8 @@ namespace Order_Pizza_Management.ViewModels
                 OnPropertyChanged("SelectedPizza");
             }
         }
+
+        private Ingredient selectedIngridient;
         public Ingredient SelectedIngridient
         {
             get { return selectedIngridient; }
@@ -44,6 +75,8 @@ namespace Order_Pizza_Management.ViewModels
                 OnPropertyChanged("SelectedIngridient");
             }
         }
+
+        private IngredientType selectedType;
         public IngredientType SelectedType
         {
             get { return selectedType; }
@@ -67,6 +100,7 @@ namespace Order_Pizza_Management.ViewModels
             dbo = new DbOperations();
             selectedCount = 1;
             orderCost = 0;
+            cpizzaCost = 0;
 
             allIngredients = dbo.GetAvailableIngredients();
             shownIngredients = new ObservableCollection<Ingredient>(allIngredients.ToList());
@@ -88,6 +122,7 @@ namespace Order_Pizza_Management.ViewModels
                     (addPizzaInOrder = new RelayCommand(obj =>
                     {
                         AddInOrder(selectedPizza, selectedCount);
+                        SelectedCount = 1;
                     }));
             }
         }
@@ -102,24 +137,15 @@ namespace Order_Pizza_Management.ViewModels
                     {
                         if (selectedIngridient.CountStock >= selectedCount)
                         {
-                            bool found = false;
-                            for (int i = 0; i < composition.Count; i++)
-                                if (composition[i].Ingredient_FK == selectedIngridient.Id)
-                                {
-                                    composition[i].Count += selectedCount;
-                                    found = true;
-                                    break;
-                                }
-                            if (!found)
+                            composition.Add(new PizzaCompositionString()
                             {
-                                composition.Add(new PizzaCompositionString()
-                                {
-                                    Ingredient = selectedIngridient,
-                                    Ingredient_FK = selectedIngridient.Id,
-                                    Count = selectedCount
-                                });
-                                selectedCount = 1;
-                            }
+                                Ingredient = selectedIngridient,
+                                Ingredient_FK = selectedIngridient.Id,
+                                Count = selectedCount
+                            });
+
+                            CustomPizzaCost = cpizzaCost + selectedIngridient.Price * selectedCount;
+                            SelectedCount = 1;
                             //int ind = allIngredients.IndexOf(selectedIngridient);
                             //allIngredients[ind].CountStock -= selectedCount;
                             //if(allIngredients[ind].CountStock < )
@@ -143,16 +169,12 @@ namespace Order_Pizza_Management.ViewModels
                     {
                         if (composition.Count != 0)
                         {
-                            double price = 0;
-                            foreach (PizzaCompositionString cs in composition)
-                                price += cs.Ingredient.Price * cs.Count;
-
                             Pizza customPizza = new Pizza()
                             {
                                 Name = "Пользовательская",
                                 InStock = true,
                                 IsCustom = true,
-                                Price = price,
+                                Price = CustomPizzaCost,
                             };
 
                             int id = dbo.AddPizza(customPizza);
@@ -171,28 +193,18 @@ namespace Order_Pizza_Management.ViewModels
 
         private void AddInOrder(Pizza pizza, int count)
         {
-            bool found = false;
-            for (int i = 0; i < orderStrings.Count; i++)
-                if (orderStrings[i].Pizza_FK == pizza.Id)
-                {
-                    orderStrings[i].Count += count;
-                    found = true;
-                    break;
-                }
-            if(!found)
+            OrderString os = new OrderString()
             {
-                OrderString os = new OrderString()
-                {
-                    Pizza = pizza,
-                    Pizza_FK = pizza.Id,
-                    Count = count,
-                };
-                orderStrings.Add(os);
-            }
+                Pizza = pizza,
+                Pizza_FK = pizza.Id,
+                Count = count,
+            };
+            orderStrings.Add(os);
+
             UpdateIngredientsCount(pizza.Id, count);
             shownPizza = new ObservableCollection<Pizza>(allPizza.Select(i => i).Where(i => i.InStock == true).ToList());
             shownIngredients = new ObservableCollection<Ingredient>(allIngredients.Select(i => i).Where(i => i.InStock).ToList());
-            orderCost += pizza.Price * count;
+            OrderCost = orderCost + pizza.Price * count;
         }
         private void UpdateIngredientsCount(int pizzaId, int count)
         {
