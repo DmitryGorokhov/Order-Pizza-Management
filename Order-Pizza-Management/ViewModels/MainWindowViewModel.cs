@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using Order_Pizza_Management.Models;
 using Order_Pizza_Management.Utils;
@@ -70,7 +71,8 @@ namespace Order_Pizza_Management.ViewModels
         private ObservableCollection<Pizza> allPizza;
         public ObservableCollection<Pizza> ShownPizza { get; set; }
 
-        private ObservableCollection<Ingredient> allIngredients, beforeCustom;
+        private ObservableCollection<Ingredient> allIngredients;
+        private List<int> beforeCustom;
         public ObservableCollection<Ingredient> ShownIngredients { get; set; }
 
         public ObservableCollection<OrderString> OrderStrings { get; set; }
@@ -178,6 +180,7 @@ namespace Order_Pizza_Management.ViewModels
                                 ShownIngredients.RemoveAt(ind);
                             }
                             SelectedCount = 1;
+                            OnPropertyChanged("ShownIngredients");
                         }
                         else
                             ds.ShowMessage("Ингредиент не был добавлен в пиццу: указанного количества ингрединта нет на складе.");    
@@ -213,8 +216,12 @@ namespace Order_Pizza_Management.ViewModels
                             Composition.Clear();
                             AddInOrder(customPizza, 1);
                             CustomPizzaCost = 0;
-                            beforeCustom = allIngredients;
+                            beforeCustom.Clear();
+                            foreach (Ingredient i in allIngredients)
+                                beforeCustom.Add(i.CountStock);
                         }
+                        else
+                            ds.ShowMessage("Пользовательская пицца пуста. Добавьте ингредиенты и попробуйте снова.");
                     }));
             }
         }
@@ -231,8 +238,14 @@ namespace Order_Pizza_Management.ViewModels
                         {
                             Composition.Clear();
                             CustomPizzaCost = 0;
-                            allIngredients = beforeCustom;
-
+                            for (int i = 0; i < allIngredients.Count; i++)
+                            {
+                                allIngredients[i].CountStock = beforeCustom[i];
+                                if (allIngredients[i].CountStock > 0)
+                                    allIngredients[i].InStock = true;
+                            }
+                            ShownIngredients = new ObservableCollection<Ingredient>(allIngredients.Select(i => i).Where(i => i.InStock).ToList());
+                            OnPropertyChanged("ShownIngredients");
                             CustomVisibility = Visibility.Hidden;
                             MenuVisibility = Visibility.Visible;
                         }
@@ -250,7 +263,9 @@ namespace Order_Pizza_Management.ViewModels
                     {
                         MenuVisibility = Visibility.Hidden;
                         CustomVisibility = Visibility.Visible;
-                        beforeCustom = allIngredients;
+                        beforeCustom = new List<int>();
+                        foreach (Ingredient i in allIngredients)
+                            beforeCustom.Add(i.CountStock);
                     }));
             }
         }
@@ -267,10 +282,34 @@ namespace Order_Pizza_Management.ViewModels
                         {
                             if (ds.EnterOrderDataDialog())
                             {
-                                bool res = Validate(ds.Address, ds.PhoneNubmber);
-                                if (res)
+                                if (Validate(ds.Address, ds.PhoneNubmber))
                                 {
-                                    // soon...
+                                    Order order = new Order()
+                                    {
+                                        Address = ds.Address,
+                                        PhoneNumber = ds.PhoneNubmber,
+                                        Cost = OrderCost
+                                    };
+                                    int orderId = dbo.AddOrder(order);
+                                    foreach (OrderString os in OrderStrings)
+                                    {
+                                        os.Order_FK = orderId;
+                                        dbo.AddOrderString(os);
+                                    }
+                                    OrderStrings.Clear();
+                                    OrderCost = 0;
+
+                                    foreach (Ingredient i in allIngredients)
+                                        dbo.UpdateIngredient(i);
+                                    allIngredients = dbo.GetAvailableIngredients();
+                                    foreach (Pizza p in allPizza)
+                                        dbo.UpdatePizza(p);
+                                    allPizza = dbo.GetAvailablePizza();
+
+                                    ShownIngredients = allIngredients;
+                                    OnPropertyChanged("ShownIngredients");
+                                    ShownPizza = allPizza;
+                                    OnPropertyChanged("ShownPizza");
                                 }
                                 else
                                     ds.ShowMessage("Введены неверные данные. Заказ не был сохранен. Попробуйте снова.");
@@ -294,7 +333,9 @@ namespace Order_Pizza_Management.ViewModels
 
             UpdateIngredientsCount(pizza.Id, count);
             ShownPizza = new ObservableCollection<Pizza>(allPizza.Select(i => i).Where(i => i.InStock == true).ToList());
+            OnPropertyChanged("ShownPizza");
             ShownIngredients = new ObservableCollection<Ingredient>(allIngredients.Select(i => i).Where(i => i.InStock).ToList());
+            OnPropertyChanged("ShownIngredients");
             OrderCost = orderCost + pizza.Price * count;
         }
         private void UpdateIngredientsCount(int pizzaId, int count)
@@ -320,8 +361,13 @@ namespace Order_Pizza_Management.ViewModels
         }
         private bool Validate(string address, string phoneNumber)
         {
-            // soon
-            return false;
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(address))
+                return false;
+            var cleaned = Regex.Replace(phoneNumber, @"[^0-9]+", "");
+            if (cleaned.Length == 11)
+                return true;
+            else
+                return false;
         }
     }
 }

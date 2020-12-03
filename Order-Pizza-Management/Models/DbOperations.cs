@@ -65,5 +65,47 @@ namespace Order_Pizza_Management.Models
                 .ToList();
         }
 
+        public int AddOrder(Order o)
+        {
+            db.Order.Add(o);
+            db.SaveChanges();
+            return o.Id;
+        }
+
+        public int AddOrderString(OrderString os)
+        {
+            db.OrderString.Add(os);
+            db.SaveChanges();
+            return os.Id;
+        }
+
+        public void UpdateIngredient(Ingredient ingr)
+        {
+            Ingredient i = db.Ingredient.Where(c => c.Id == ingr.Id).FirstOrDefault();
+            if (i != null)
+            {
+                i.InStock = ingr.InStock;
+                i.Name = ingr.Name;
+                i.Price = ingr.Price;
+                i.CountStock = ingr.CountStock;
+                i.Type_FK = ingr.Type_FK;
+                // db.Ingredient.Update(i);
+                db.SaveChanges();
+            }
+        }
+        public void UpdatePizza(Pizza pizza)
+        {
+            Pizza p = db.Pizza.Where(c => c.Id == pizza.Id).FirstOrDefault();
+            if (p != null)
+            {
+                p.Name = pizza.Name;
+                p.Price = pizza.Price;
+                p.InStock = pizza.InStock;
+                p.Description = pizza.Description;
+                p.IsCustom = pizza.IsCustom;
+                //db.Pizza.Update(p);
+                db.SaveChanges();
+            }
+        }
     }
 }
