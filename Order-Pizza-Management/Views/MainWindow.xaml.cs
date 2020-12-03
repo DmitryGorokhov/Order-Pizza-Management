@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Order_Pizza_Management.ViewModels;
-using Order_Pizza_Management.Views;
 
 namespace Order_Pizza_Management
 {
@@ -50,22 +49,6 @@ namespace Order_Pizza_Management
         {
             NoNameGrid.Visibility = Visibility.Visible;
             OrderingGrid.Visibility = Visibility.Hidden;
-        }
-
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
-        {
-            AcceptWindow window = new AcceptWindow();
-            if (window.ShowDialog() == true)
-            {
-                MenuGrid.Visibility = Visibility.Visible;
-                CustomGrid.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void CustomButton_Click(object sender, RoutedEventArgs e)
-        {
-            CustomGrid.Visibility = Visibility.Visible;
-            MenuGrid.Visibility = Visibility.Hidden;
         }
 
         private void EnterButton_Click(object sender, RoutedEventArgs e)

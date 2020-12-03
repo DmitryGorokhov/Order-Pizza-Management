@@ -104,6 +104,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\EnterOrderDataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,6 +118,9 @@
     </Compile>
     <Compile Include="Views\AcceptWindow.xaml.cs">
       <DependentUpon>AcceptWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EnterOrderDataWindow.xaml.cs">
+      <DependentUpon>EnterOrderDataWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -118,6 +118,7 @@ namespace Order_Pizza_Management.ViewModels
 
         private DbOperations dbo;
         private DialogService ds;
+
         public MainWindowViewModel()
         {
             dbo = new DbOperations();
@@ -211,8 +212,72 @@ namespace Order_Pizza_Management.ViewModels
                             }
                             Composition.Clear();
                             AddInOrder(customPizza, 1);
+                            CustomPizzaCost = 0;
                             beforeCustom = allIngredients;
                         }
+                    }));
+            }
+        }
+
+        private RelayCommand switchToMenu;
+        public RelayCommand SwitchToMenu
+        {
+            get
+            {
+                return switchToMenu ??
+                    (switchToMenu = new RelayCommand(obj =>
+                    {
+                        if (Composition.Count == 0 || ds.AcceptionDialog())
+                        {
+                            Composition.Clear();
+                            CustomPizzaCost = 0;
+                            allIngredients = beforeCustom;
+
+                            CustomVisibility = Visibility.Hidden;
+                            MenuVisibility = Visibility.Visible;
+                        }
+                    }));
+            }
+        }
+
+        private RelayCommand switchToCustom;
+        public RelayCommand SwitchToCustom
+        {
+            get
+            {
+                return switchToCustom ??
+                    (switchToCustom = new RelayCommand(obj =>
+                    {
+                        MenuVisibility = Visibility.Hidden;
+                        CustomVisibility = Visibility.Visible;
+                        beforeCustom = allIngredients;
+                    }));
+            }
+        }
+
+        private RelayCommand finishOrdering;
+        public RelayCommand FinishOrdering
+        {
+            get
+            {
+                return finishOrdering ??
+                    (finishOrdering = new RelayCommand(obj =>
+                    {
+                        if (OrderStrings.Count != 0)
+                        {
+                            if (ds.EnterOrderDataDialog())
+                            {
+                                bool res = Validate(ds.Address, ds.PhoneNubmber);
+                                if (res)
+                                {
+                                    // soon...
+                                }
+                                else
+                                    ds.ShowMessage("Введены неверные данные. Заказ не был сохранен. Попробуйте снова.");
+                            }
+                        }
+                        else
+                            ds.ShowMessage("Заказ пуст. Добавьте пиццу из меню или пользовательскую пиццу и попробуйте снова.");
                     }));
             }
         }
@@ -253,56 +318,10 @@ namespace Order_Pizza_Management.ViewModels
                 if(pizzaIDs.Contains(allPizza[i].Id))
                     allPizza[i].InStock = false;
         }
-
-        private RelayCommand finishOrdering;
-        public RelayCommand FinishOrdering
+        private bool Validate(string address, string phoneNumber)
         {
-            get
-            {
-                return finishOrdering ??
-                    (finishOrdering = new RelayCommand(obj =>
-                    {
-                        // soon...
-                    }));
-            }
-        }
-
-        private RelayCommand switchToMenu;
-        public RelayCommand SwitchToMenu
-        {
-            get
-            {
-                return switchToMenu ??
-                    (switchToMenu = new RelayCommand(obj =>
-                    {
-                        if (Composition.Count == 0 || ds.AcceptionDialog() == true)
-                        {
-                            // Clear composition!!!
-                            Composition.Clear();
-                            CustomPizzaCost = 0;
-                            allIngredients = beforeCustom;
-                            beforeCustom.Clear();
-
-                            CustomVisibility = Visibility.Hidden;
-                            MenuVisibility = Visibility.Visible;
-                        }
-                    }));
-            }
-        }
-
-        private RelayCommand switchToCustom;
-        public RelayCommand SwitchToCustom
-        {
-            get
-            {
-                return switchToCustom ??
-                    (switchToCustom = new RelayCommand(obj =>
-                    {
-                        MenuVisibility = Visibility.Hidden;
-                        CustomVisibility = Visibility.Visible;
-                        beforeCustom = allIngredients;
-                    }));
-            }
+            // soon
+            return false;
         }
     }
 }

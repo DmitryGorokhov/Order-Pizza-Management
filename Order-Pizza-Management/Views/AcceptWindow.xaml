@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Внимание" Height="180" Width="300" ResizeMode="NoResize">
     <Grid>
-        <TextBlock Margin="2" TextWrapping="Wrap" FontSize="14">
+        <TextBlock Margin="8" TextWrapping="Wrap" FontSize="14">
             Пользовательская пицца не была добавлена в заказ. При переходе к меню строки состава будет очищены. 
             <LineBreak />
             <LineBreak />

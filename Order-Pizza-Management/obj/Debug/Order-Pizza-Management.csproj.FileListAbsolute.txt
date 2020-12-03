@@ -40,3 +40,5 @@ C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\AcceptWindow.g.cs
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\AcceptWindow.baml
+C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\EnterOrderDataWindow.g.cs
+C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\EnterOrderDataWindow.baml
