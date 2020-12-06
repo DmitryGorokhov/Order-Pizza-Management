@@ -1,0 +1,24 @@
+﻿<Window x:Class="Order_Pizza_Management.Views.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Order_Pizza_Management.Views"
+        mc:Ignorable="d"
+        Title="Вход администратора" Height="150" Width="300">
+    <Grid>
+        <StackPanel Margin="8" Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Margin="8" Text="Введите пароль:" FontSize="16"/>
+            <TextBox Name="passwordBox" Width="150" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Column="1">
+            <Button Click="AcceptButton_Click" Content="Подтвердить" Margin="4,0,8,0" Background="#727077" BorderBrush="{x:Null}" Height="28">
+                <Button.ToolTip>Подтвердить введенный пароль</Button.ToolTip>
+            </Button>
+        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+    </Grid>
+</Window>

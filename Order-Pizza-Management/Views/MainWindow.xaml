@@ -37,7 +37,7 @@
                             <TextBlock Text="Управление" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ReportButton" Visibility="Hidden" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Click="ReportButton_Click">
+                    <Button x:Name="ReportButton" Visibility="Hidden" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Command="{Binding ExportReport}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="File" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Отчеты" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
@@ -63,8 +63,8 @@
                 </Grid.RowDefinitions>
             </Grid>
             <Grid x:Name="ContentGrid" Grid.Column="1">
-                <Grid x:Name="OrderingGrid">
-                    <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
+                <Grid x:Name="OrderingGrid" Visibility = "Hidden">
+                    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
                         <Grid>
                             <UniformGrid Grid.Row="0" Rows="1" Columns="2">
                                 <Button Content="Меню"  Margin="5 5" Background="#727077" BorderBrush="{x:Null}" Command="{Binding SwitchToMenu}" >
@@ -89,7 +89,7 @@
                                                                 <TextBlock Margin="4 4" FontSize="16" Text="стоимость:" />
                                                                 <TextBlock Margin="0 4" FontSize="16" Text="{Binding Path=Price}" />
                                                             </StackPanel>
-                                                            <TextBlock Margin="4" FontSize="14" Text="{Binding Path=Description}" />
+                                                            <TextBlock TextWrapping="Wrap" Margin="4" FontSize="14" Text="{Binding Path=Description}" />
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -144,7 +144,7 @@
                                             <Grid Grid.Column="0">
                                                 <TextBlock Grid.Row="0" Margin="4" FontSize="18" Text="Доступные ингредиенты" HorizontalAlignment="Center" VerticalAlignment="Top" />
                                                 <ListBox Grid.Row="1" ItemsSource="{Binding ShownIngredients}"
-                                                    SelectedItem="{Binding SelectedIngridient}" 
+                                                    SelectedItem="{Binding SelectedIngredient}" 
                                                     ScrollViewer.VerticalScrollBarVisibility="Auto" Height="450">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
@@ -152,7 +152,7 @@
                                                                 <TextBlock FontSize="14" Margin="4" Text="{Binding Path=IngredientType.Value}" />
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <TextBlock FontSize="16" Margin="4" Text="{Binding Path=Name}" FontWeight="Bold" />
-                                                                    <TextBlock FontSize="16" Margin="4" Text="Цена: " />
+                                                                    <TextBlock FontSize="16" Margin="4" Text="цена: " />
                                                                     <TextBlock FontSize="16" Margin="0 4" Text="{Binding Path=Price}" />
                                                                 </StackPanel>
                                                                 <StackPanel Orientation="Horizontal">
@@ -165,11 +165,11 @@
                                                 </ListBox>
                                                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                                                     <TextBlock Margin="10" FontSize="14" Text="Количество" />
-                                                    <xctk:IntegerUpDown x:Name="Count" Width="60" Height="30" Value="{Binding SelectedCount}" Minimum="1"/>
+                                                    <xctk:IntegerUpDown Width="60" Height="30" Value="{Binding SelectedCount}" Minimum="1"/>
                                                     <Button Content="Добавить" Margin="20,4,4,4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding AddIngredientInPizza}">
                                                         <Button.ToolTip>Добавить выбранный ингредиент</Button.ToolTip>
                                                     </Button>
-                                            </StackPanel>
+                                                </StackPanel>
                                                 
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="auto"/>
@@ -236,8 +236,220 @@
                         </Grid>
                     </materialDesign:TransitioningContent>
                 </Grid>
-                <Grid x:Name="NoNameGrid" Visibility = "Hidden">
+                <Grid x:Name="CRUDGrid" Visibility = "Visible">
+                    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
+                        <TabControl Margin="4">
+                            <TabItem Header="Пиццы" FontSize="14">
+                                <Grid>
+                                    <Grid Grid.Column="0"> 
+                                        <ListBox Grid.Row="0" ItemsSource="{Binding AllPizza}"
+                                                    SelectedItem="{Binding SelectedPizza}"
+                                                    ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="8">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Margin="4">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Margin="4,4,12,4" FontSize="16" Text="{Binding Path=Name}" FontWeight="Bold" />
+                                                        <TextBlock Margin="4 4" FontSize="16" Text="стоимость:" />
+                                                        <TextBlock Margin="0 4" FontSize="16" Text="{Binding Path=Price}" />
+                                                    </StackPanel>
+                                                    <TextBlock TextWrapping="Wrap" Margin="4" FontSize="16" Text="{Binding Path=Description}" />
+                                                    <CheckBox IsEnabled="False" IsChecked="{Binding Path=InStock}" Content="В наличии" Margin="4" FontSize="16"/>
+                                                    <CheckBox IsChecked="{Binding Path=IsCustom}" Content="Пользовательская" Margin="4" FontSize="16"/>
+                                                    <CheckBox IsChecked="{Binding Path=IsVisible}" Content="Видимая" Margin="4" FontSize="16"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                                            <Button Content="Создать" Margin="4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding CreatePizza}">
+                                                <Button.ToolTip>Создать пиццу</Button.ToolTip>
+                                            </Button>
+                                        </StackPanel>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                    <StackPanel Grid.Column="1" DataContext="{Binding SelectedPizza}" HorizontalAlignment="Right">
+                                        <TextBlock Margin="4,4,4,16" FontSize="16" Text="Редактирование выбранного элемента" />
+                                        <TextBlock Text="Название" Margin="4" FontSize="14"/>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="70" Margin="4" FontSize="14"/>
+                                        <TextBlock Text="Описание" Margin="4" FontSize="14"/>
+                                        <TextBox Text="{Binding Description, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="250" Margin="4" FontSize="14"/>
+                                        <CheckBox IsChecked="{Binding Path=IsCustom, UpdateSourceTrigger=PropertyChanged}" Content="Пользовательская" Margin="4" FontSize="14"/>
+                                        <CheckBox IsChecked="{Binding Path=IsVisible, UpdateSourceTrigger=PropertyChanged}" Content="Видимая" Margin="4" FontSize="14"/>
+                                        <Button Content="Применить изменения" Margin="4,16" Background="#727077" BorderBrush="{x:Null}" Command="{Binding UpdateSelectedPizza}">
+                                            <Button.ToolTip>Сохранить изменения для выбранной пиццы</Button.ToolTip>
+                                        </Button>
+                                    </StackPanel>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Редактор состава" FontSize="14" >
+                                <Grid>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Grid.Row="0" Text="Список пицц" FontSize="18" Margin="4,4,4,8" HorizontalAlignment="Center" />
+                                        <ListBox Grid.Row="1" ItemsSource="{Binding AllPizza}"
+                                                    SelectedItem="{Binding ChangingPizza}"
+                                                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Margin="4">
+                                                        <TextBlock Margin="4,4,12,4" FontSize="16" Text="{Binding Path=Name}" FontWeight="Bold" />
+                                                        <TextBlock TextWrapping="Wrap" Margin="4" FontSize="14" Text="{Binding Path=Description}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <TextBlock Grid.Row="0" Text="Состав" FontSize="18" Margin="4,4,4,8" HorizontalAlignment="Center" />
+                                        <ListBox Grid.Row="1" ItemsSource="{Binding Composition}"
+                                                 SelectedItem="{Binding SelectedCompositionItem}"
+                                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock FontSize="16" Margin="4 2" Text="{Binding Path=Ingredient.Name}" FontFamily="Champagne &amp; Limousines" FontWeight="Bold" />
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock FontSize="14" Margin="4 2" Text="Количество: " FontFamily="Champagne &amp; Limousines" />
+                                                            <TextBlock FontSize="14" Margin="4 2" Text="{Binding Path=Count}" FontFamily="Champagne &amp; Limousines" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <StackPanel Grid.Row="2" VerticalAlignment="Bottom">
+                                            <StackPanel  Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,8">
+                                                <TextBlock Text="Стоимость:" VerticalAlignment="Center" FontSize="18" FontFamily="Champagne &amp; Limousines" Margin="8,0,12,0"/>
+                                                <TextBlock Text="{Binding CustomPizzaCost}" VerticalAlignment="Center" FontSize="18" FontFamily="Champagne &amp; Limousines"/>
+                                            </StackPanel>
+                                            <StackPanel  Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,4,0,0">
+                                                <Button Content="Удалить" Margin="4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding DeleteIngredientComposition}">
+                                                    <Button.ToolTip>Удалить выбранный ингредиент из состава</Button.ToolTip>
+                                                </Button>
+                                                <Button Content="Применить" Margin="4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding UpdateComposition}">
+                                                    <Button.ToolTip>Применить изменения состава пиццы</Button.ToolTip>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                    <Grid Grid.Column="2">
+                                        <TextBlock Grid.Row="0" Text="Список ингредиентов" FontSize="18" Margin="4,4,4,8" HorizontalAlignment="Center" />
+                                        <ListBox Grid.Row="1" ItemsSource="{Binding Ingredients}"
+                                                    SelectedItem="{Binding SelectedIngredient}" 
+                                                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock FontSize="14" Margin="4" Text="{Binding Path=IngredientType.Value}" />
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock FontSize="16" Margin="4" Text="{Binding Path=Name}" FontWeight="Bold" />
+                                                            <TextBlock FontSize="16" Margin="4" Text="цена: " />
+                                                            <TextBlock FontSize="16" Margin="0 4" Text="{Binding Path=Price}" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom">
+                                            <TextBlock Margin="10" FontSize="14" Text="Количество" />
+                                                <xctk:IntegerUpDown Width="60" Height="30" Value="{Binding SelectedCount}" Minimum="1"/>
+                                                <Button Content="Добавить" Margin="20,4,4,4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding AddIngredientInPizza}">
+                                                    <Button.ToolTip>Добавить выбранный ингредиент</Button.ToolTip>
+                                                </Button>
+                                        </StackPanel>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
 
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Ингредиенты" FontSize="14" >
+                                <Grid>
+                                    <Grid Grid.Column="0">
+                                        <ListBox Grid.Row="0" ItemsSource="{Binding Ingredients}"
+                                                    SelectedItem="{Binding SelectedIngredient}" 
+                                                    ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="8">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock FontSize="16" Margin="4" Text="{Binding Path=Name}" FontWeight="Bold" />
+                                                            <TextBlock FontSize="16" Margin="4" Text="цена: " />
+                                                            <TextBlock FontSize="16" Margin="0 4" Text="{Binding Path=Price}" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock FontSize="16" Margin="4" Text="Тип: " />
+                                                            <TextBlock FontSize="16" Margin="4" Text="{Binding Path=IngredientType.Value}" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock FontSize="16" Margin="4" Text="Количество на складе: " />
+                                                            <TextBlock FontSize="16" Margin="0 4" Text="{Binding Path=CountStock}" />
+                                                        </StackPanel>
+                                                        <CheckBox IsEnabled="False" IsChecked="{Binding Path=InStock}" Content="В наличии" Margin="4" FontSize="16"/>
+                                                        <CheckBox IsChecked="{Binding Path=IsVisible}" Content="Видимый" Margin="4" FontSize="16"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                                            <Button Content="Создать" Margin="4" Background="#727077" BorderBrush="{x:Null}" Command="{Binding CreateIngr}">
+                                                <Button.ToolTip>Создать ингредиент</Button.ToolTip>
+                                            </Button>
+                                        </StackPanel>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                        <StackPanel  DataContext="{Binding SelectedIngredient}" >
+                                        <TextBlock Margin="4,4,4,16" FontSize="16" Text="Редактирование выбранного элемента" />
+                                        <TextBlock Text="Название" Margin="4" FontSize="14"/>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="70" Margin="4" FontSize="14"/>
+                                        <TextBlock Text="Цена" Margin="4" FontSize="14"/>
+                                        <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4" FontSize="14"/>
+                                        <TextBlock Margin="4" FontSize="14" Text="Количество на складе" />
+                                        <xctk:IntegerUpDown Margin="4" FontSize="14" Value="{Binding Path=CountStock, UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
+                                        
+                                        <CheckBox IsChecked="{Binding Path=IsVisible, UpdateSourceTrigger=PropertyChanged}" Content="Видимый" Margin="4" FontSize="14"/>
+                                        </StackPanel>
+                                        <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Value" Margin="4" FontSize="14" />
+                                        <Button Content="Применить изменения" Margin="4,16" Background="#727077" BorderBrush="{x:Null}" Command="{Binding UpdateSelectedIngr}">
+                                            <Button.ToolTip>Сохранить изменения для выбранного ингредиента</Button.ToolTip>
+                                        </Button>
+                                    </StackPanel>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                    </materialDesign:TransitioningContent>        
                 </Grid>
             </Grid>
 

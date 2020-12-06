@@ -29,6 +29,8 @@ namespace Order_Pizza_Management.Models
 
         public int Type_FK { get; set; }
 
+        public bool IsVisible { get; set; }
+
         public virtual IngredientType IngredientType { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -30,6 +30,8 @@ namespace Order_Pizza_Management.Models
 
         public bool IsCustom { get; set; }
 
+        public bool IsVisible { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderString> OrderString { get; set; }
 

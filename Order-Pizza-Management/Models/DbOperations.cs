@@ -18,14 +18,14 @@ namespace Order_Pizza_Management.Models
         public ObservableCollection<Ingredient> GetAvailableIngredients()
         {
             var r =  db.Ingredient.Select(c => c)
-                .Where(c => c.InStock == true).ToList();
+                .Where(c => c.InStock && c.IsVisible).ToList();
             return new ObservableCollection<Ingredient>(r);
         }
 
         public ObservableCollection<Pizza> GetAvailablePizza()
         {
             var r = db.Pizza.Select(c => c)
-                .Where(c => c.InStock == true && c.IsCustom == false).ToList();
+                .Where(c => c.InStock == true && !c.IsCustom && c.IsVisible).ToList();
             return new ObservableCollection<Pizza>(r);
         }
 
@@ -84,15 +84,17 @@ namespace Order_Pizza_Management.Models
             Ingredient i = db.Ingredient.Where(c => c.Id == ingr.Id).FirstOrDefault();
             if (i != null)
             {
-                i.InStock = ingr.InStock;
                 i.Name = ingr.Name;
                 i.Price = ingr.Price;
                 i.CountStock = ingr.CountStock;
+                if (i.CountStock > 0) i.InStock = true;
+                else i.InStock = false;
                 i.Type_FK = ingr.Type_FK;
-                // db.Ingredient.Update(i);
+                i.IsVisible = ingr.IsVisible;
                 db.SaveChanges();
             }
         }
+
         public void UpdatePizza(Pizza pizza)
         {
             Pizza p = db.Pizza.Where(c => c.Id == pizza.Id).FirstOrDefault();
@@ -103,9 +105,53 @@ namespace Order_Pizza_Management.Models
                 p.InStock = pizza.InStock;
                 p.Description = pizza.Description;
                 p.IsCustom = pizza.IsCustom;
-                //db.Pizza.Update(p);
+                p.IsVisible = pizza.IsVisible;
                 db.SaveChanges();
             }
+        }
+
+        public ObservableCollection<Ingredient> GetAllIngredients()
+        {
+            var r = db.Ingredient.Select(c => c).ToList();
+            return new ObservableCollection<Ingredient>(r);
+        }
+
+        public ObservableCollection<Pizza> GetAllPizza()
+        {
+            var r = db.Pizza.Select(c => c).ToList();
+            return new ObservableCollection<Pizza>(r);
+        }
+
+        public int AddIngredient(Ingredient i)
+        {
+            db.Ingredient.Add(i);
+            db.SaveChanges();
+            return i.Id;
+        }
+
+        public List<PizzaCompositionString> GetAllCompositionString()
+        {
+            var r = db.PizzaCompositionString.Select(c => c).ToList();
+            return r;
+        }
+
+        public void UpdateCompositionString(PizzaCompositionString cs)
+        {
+            PizzaCompositionString c = db.PizzaCompositionString.Where(i => i.Id == cs.Id).FirstOrDefault();
+            if (c != null)
+            {
+                c.Ingredient_FK = cs.Ingredient_FK;
+                c.Pizza_FK = cs.Pizza_FK;
+                c.Count = cs.Count;
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteCompositionString(PizzaCompositionString cs)
+        {
+            PizzaCompositionString c = db.PizzaCompositionString.Where(i => i.Id == cs.Id).FirstOrDefault();
+            db.PizzaCompositionString.Remove(c);
+            db.SaveChanges();
         }
     }
 }

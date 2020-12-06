@@ -37,17 +37,12 @@ namespace Order_Pizza_Management
         private void OrderButton_Click(object sender, RoutedEventArgs e)
         {
             OrderingGrid.Visibility = Visibility.Visible;
-            NoNameGrid.Visibility = Visibility.Hidden;
-        }
-
-        private void ReportButton_Click(object sender, RoutedEventArgs e)
-        {
-            
+            CRUDGrid.Visibility = Visibility.Hidden;
         }
 
         private void ContolButton_Click(object sender, RoutedEventArgs e)
         {
-            NoNameGrid.Visibility = Visibility.Visible;
+            CRUDGrid.Visibility = Visibility.Visible;
             OrderingGrid.Visibility = Visibility.Hidden;
         }
 
