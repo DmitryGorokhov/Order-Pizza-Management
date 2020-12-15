@@ -34,34 +34,5 @@ namespace Order_Pizza_Management
             DragMove();
         }
 
-        private void OrderButton_Click(object sender, RoutedEventArgs e)
-        {
-            OrderingGrid.Visibility = Visibility.Visible;
-            CRUDGrid.Visibility = Visibility.Hidden;
-        }
-
-        private void ContolButton_Click(object sender, RoutedEventArgs e)
-        {
-            CRUDGrid.Visibility = Visibility.Visible;
-            OrderingGrid.Visibility = Visibility.Hidden;
-        }
-
-        private void EnterButton_Click(object sender, RoutedEventArgs e)
-        {
-            OrderButton.Visibility = Visibility.Hidden;
-            ContolButton.Visibility = Visibility.Visible;
-            ReportButton.Visibility = Visibility.Visible;
-            EnterButton.Visibility = Visibility.Hidden;
-            LogoutPanel.Visibility = Visibility.Visible;
-        }
-
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            OrderButton.Visibility = Visibility.Visible;
-            ContolButton.Visibility = Visibility.Hidden;
-            ReportButton.Visibility = Visibility.Hidden;
-            EnterButton.Visibility = Visibility.Visible;
-            LogoutPanel.Visibility = Visibility.Hidden;
-        }
     }
 }

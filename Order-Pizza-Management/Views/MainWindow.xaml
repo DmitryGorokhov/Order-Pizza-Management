@@ -25,19 +25,19 @@
             <Grid Grid.Column="0" Background="#727077" Margin="4">
                 <StackPanel Grid.Row="0"  VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,16">
                     <TextBlock Text="1-ая Пиццерия" HorizontalAlignment="Center" FontSize="18" FontFamily="Champagne &amp; Limousines" TextAlignment="Center" Foreground="White" VerticalAlignment="Center"/>
-                    <Button x:Name="OrderButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="OrderButton_Click">
+                    <Button Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Visibility="{Binding LogOutVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Pizza" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Заказ" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ContolButton" Visibility="Hidden" Background="#E99787" BorderBrush="{x:Null}"  Margin="24 12" Click="ContolButton_Click">
+                    <Button Visibility="{Binding LogInVisibility}" Background="#E99787" BorderBrush="{x:Null}"  Margin="24 12" >
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Управление" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ReportButton" Visibility="Hidden" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Command="{Binding ExportReport}">
+                    <Button Visibility="{Binding LogInVisibility}" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Command="{Binding ExportReport}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="File" VerticalAlignment="Center" Margin="4"/>
                             <TextBlock Text="Отчеты" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
@@ -45,14 +45,14 @@
                     </Button>
                 </StackPanel>
                 <StackPanel Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                    <StackPanel x:Name="LogoutPanel" Visibility="Hidden">
+                    <StackPanel Visibility="{Binding LogInVisibility}">
                         <TextBlock Text="Вы вошли как Админисратор" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0" HorizontalAlignment="Center" Foreground="White"/>
-                        <Button x:Name="ExitButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="ExitButton_Click">
-                                <TextBlock Text="Выйти" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                        <Button Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Command="{Binding LogOut}">
+                            <TextBlock Text="Выйти" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </Button>
                     </StackPanel>
-                    <Button x:Name="EnterButton" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Click="EnterButton_Click">
-                            <TextBlock Text="Вход админисратора" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                    <Button Visibility="{Binding LogOutVisibility}" Background="#E99787" BorderBrush="{x:Null}" Margin="24 12" Command="{Binding LogIn}">
+                        <TextBlock Text="Вход админисратора" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                     </Button>
                 </StackPanel>
 
@@ -63,7 +63,7 @@
                 </Grid.RowDefinitions>
             </Grid>
             <Grid x:Name="ContentGrid" Grid.Column="1">
-                <Grid x:Name="OrderingGrid" Visibility = "Hidden">
+                <Grid x:Name="OrderingGrid" Visibility="{Binding LogOutVisibility}">
                     <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
                         <Grid>
                             <UniformGrid Grid.Row="0" Rows="1" Columns="2">
@@ -236,7 +236,7 @@
                         </Grid>
                     </materialDesign:TransitioningContent>
                 </Grid>
-                <Grid x:Name="CRUDGrid" Visibility = "Visible">
+                <Grid x:Name="CRUDGrid" Visibility="{Binding LogInVisibility}">
                     <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom, Duration=0:0:0.6}">
                         <TabControl Margin="4">
                             <TabItem Header="Пиццы" FontSize="14">

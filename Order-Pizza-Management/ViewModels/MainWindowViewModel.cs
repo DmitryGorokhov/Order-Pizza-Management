@@ -35,6 +35,29 @@ namespace Order_Pizza_Management.ViewModels
             }
         }
 
+        private Visibility logInVisibility = Visibility.Hidden;
+        public Visibility LogInVisibility
+        {
+            get { return logInVisibility; }
+            set
+            {
+                logInVisibility = value;
+                OnPropertyChanged("LogInVisibility");
+            }
+        }
+
+
+        private Visibility logOutVisibility = Visibility.Visible;
+        public Visibility LogOutVisibility
+        {
+            get { return logOutVisibility; }
+            set
+            {
+                logOutVisibility = value;
+                OnPropertyChanged("LogOutVisibility");
+            }
+        }
+
         private double cpizzaCost = 0;
         public double CustomPizzaCost
         {
@@ -669,6 +692,36 @@ namespace Order_Pizza_Management.ViewModels
                         {
                             ds.ShowMessage("При добавлении ингредиента произошла ошибка. Повторите попытку.");
                         }
+                    }));
+            }
+        }
+
+        private RelayCommand logIn;
+        public RelayCommand LogIn
+        {
+            get
+            {
+                return logIn ??
+                    (logIn = new RelayCommand(obj =>
+                    {
+                        // soon ...
+                        LogOutVisibility = Visibility.Hidden;
+                        LogInVisibility = Visibility.Visible;
+                    }));
+            }
+        }
+
+        private RelayCommand logOut;
+        public RelayCommand LogOut
+        {
+            get
+            {
+                return logOut ??
+                    (logOut = new RelayCommand(obj =>
+                    {
+                        // soon ...
+                        LogInVisibility = Visibility.Hidden;
+                        LogOutVisibility = Visibility.Visible;
                     }));
             }
         }
