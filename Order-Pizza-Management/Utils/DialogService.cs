@@ -9,6 +9,7 @@ namespace Order_Pizza_Management.Utils
         public string FilePath { get; set; }
         public string PhoneNubmber { get; set; }
         public string Address { get; set; }
+        public string Password { get; set; }
 
         public bool SaveFileDialog()
         {
@@ -39,6 +40,17 @@ namespace Order_Pizza_Management.Utils
             {
                 PhoneNubmber = window.PhoneNumber;
                 Address = window.Address;
+                return true;
+            }
+            else return false;
+        }
+
+        public bool LogIn()
+        {
+            LogInWindow window = new LogInWindow();
+            if (window.ShowDialog() == true)
+            {
+                Password = window.Password;
                 return true;
             }
             else return false;

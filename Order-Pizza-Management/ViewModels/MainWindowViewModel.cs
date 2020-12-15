@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -475,6 +474,10 @@ namespace Order_Pizza_Management.ViewModels
             else
                 return false;
         }
+        private bool ValidatePassword(string password)
+        {
+           return !string.IsNullOrEmpty(password);
+        }
 
         private RelayCommand createPizza;
         public RelayCommand CreatePizza
@@ -704,9 +707,17 @@ namespace Order_Pizza_Management.ViewModels
                 return logIn ??
                     (logIn = new RelayCommand(obj =>
                     {
-                        // soon ...
-                        LogOutVisibility = Visibility.Hidden;
-                        LogInVisibility = Visibility.Visible;
+                        if ((Composition.Count == 0 || ds.AcceptionDialog()) && ds.LogIn())
+                        {
+                            if (ValidatePassword(ds.Password))
+                            {
+                                LogOutVisibility = Visibility.Hidden;
+                                LogInVisibility = Visibility.Visible;
+                                // init collections
+                                // soon ...
+                            }
+                            else ds.ShowMessage("Указанный пароль неверен. Повторите попытку.");
+                        }
                     }));
             }
         }
@@ -719,9 +730,10 @@ namespace Order_Pizza_Management.ViewModels
                 return logOut ??
                     (logOut = new RelayCommand(obj =>
                     {
-                        // soon ...
                         LogInVisibility = Visibility.Hidden;
                         LogOutVisibility = Visibility.Visible;
+                        // init collections
+                        // soon ...
                     }));
             }
         }
