@@ -17,7 +17,7 @@ namespace Order_Pizza_Management.Views
 
         public string Password
         {
-            get { return passwordBox.Text; }
+            get { return passwordBox.Password; }
         }
     }
 }

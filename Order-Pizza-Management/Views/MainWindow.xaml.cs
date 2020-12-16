@@ -22,5 +22,14 @@ namespace Order_Pizza_Management
             DragMove();
         }
 
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ClickCount == 2)
+            {
+                if (Window.WindowState == WindowState.Maximized)
+                    Window.WindowState = WindowState.Normal;
+                else Window.WindowState = WindowState.Maximized; 
+            }
+        }
     }
 }

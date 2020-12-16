@@ -239,10 +239,10 @@ namespace Order_Pizza_Management.ViewModels
                                 int ind = availableIngredients.IndexOf(selectedIngredient);
                                 availableIngredients[ind].CountStock -= selectedCount;
                                 if (availableIngredients[ind].CountStock < 1)
-                                {
-                                    ind = ShownIngredients.IndexOf(selectedIngredient);
-                                    ShownIngredients.RemoveAt(ind);
-                                }
+                                    availableIngredients[ind].InStock = false;
+
+                                ShownIngredients = new ObservableCollection<Ingredient>(
+                                    availableIngredients.Where(i => i.InStock).ToList());
                                 SelectedCount = 1;
                                 OnPropertyChanged("ShownIngredients");
                             }
@@ -663,6 +663,7 @@ namespace Order_Pizza_Management.ViewModels
                             changingPizza.InStock = GetPizzaStock(changingPizza.Id);
                             dbo.UpdatePizza(changingPizza);
                             allCompositionStrings = dbo.GetAllCompositionString();
+                            OnPropertyChanged("AllPizza");
                         }
                         catch
                         {
@@ -686,6 +687,7 @@ namespace Order_Pizza_Management.ViewModels
                             CustomPizzaCost = cpizzaCost + dop;
                             SelectedCount = 1;
                             OnPropertyChanged("Composition");
+                            SelectedIngredient = null;
                         }
                         catch (System.NullReferenceException)
                         {

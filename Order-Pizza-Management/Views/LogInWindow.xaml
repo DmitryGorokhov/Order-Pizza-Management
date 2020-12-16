@@ -9,9 +9,9 @@
     <Grid>
         <StackPanel>
             <TextBlock FontSize="14" Margin="4,8,4,16" Text="Вход администратора" TextAlignment="Center" HorizontalAlignment="Left"/>
-            <StackPanel Margin="4" Orientation="Horizontal">
+            <StackPanel Margin="4" Orientation="Horizontal"  FocusManager.FocusedElement="{Binding ElementName=passwordBox}">
                 <TextBlock FontSize="14" Text="Пароль:" Margin="0,0,8,0"/>
-                <TextBox Name="passwordBox" Width="200"/>
+                <PasswordBox Name="passwordBox" Width="200"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="2,4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
