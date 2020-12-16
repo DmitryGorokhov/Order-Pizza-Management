@@ -271,14 +271,16 @@
                                             <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
                                     </Grid>
-                                    <StackPanel Grid.Column="1" DataContext="{Binding SelectedPizza}" HorizontalAlignment="Right">
-                                        <TextBlock Margin="4,4,4,16" FontSize="16" Text="Редактирование выбранного элемента" />
-                                        <TextBlock Text="Название" Margin="4" FontSize="14"/>
-                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="70" Margin="4" FontSize="14"/>
-                                        <TextBlock Text="Описание" Margin="4" FontSize="14"/>
-                                        <TextBox Text="{Binding Description, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="250" Margin="4" FontSize="14"/>
-                                        <CheckBox IsChecked="{Binding Path=IsCustom, UpdateSourceTrigger=PropertyChanged}" Content="Пользовательская" Margin="4" FontSize="14"/>
-                                        <CheckBox IsChecked="{Binding Path=IsVisible, UpdateSourceTrigger=PropertyChanged}" Content="Видимая" Margin="4" FontSize="14"/>
+                                    <StackPanel Grid.Column="1"  HorizontalAlignment="Right">
+                                        <StackPanel DataContext="{Binding SelectedPizza}">
+                                            <TextBlock Margin="4,4,4,16" FontSize="16" Text="Редактирование выбранного элемента" />
+                                            <TextBlock Text="Название" Margin="4" FontSize="14"/>
+                                            <TextBox Text="{Binding Name, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="70" Margin="4" FontSize="14"/>
+                                            <TextBlock Text="Описание" Margin="4" FontSize="14"/>
+                                            <TextBox Text="{Binding Description, UpdateSourceTrigger=LostFocus}" Width="300" MaxLength="250" Margin="4" FontSize="14"/>
+                                            <CheckBox IsChecked="{Binding Path=IsCustom, UpdateSourceTrigger=PropertyChanged}" Content="Пользовательская" Margin="4" FontSize="14"/>
+                                            <CheckBox IsChecked="{Binding Path=IsVisible, UpdateSourceTrigger=PropertyChanged}" Content="Видимая" Margin="4" FontSize="14"/>
+                                        </StackPanel>
                                         <Button Content="Применить изменения" Margin="4,16" Background="#727077" BorderBrush="{x:Null}" Command="{Binding UpdateSelectedPizza}">
                                             <Button.ToolTip>Сохранить изменения для выбранной пиццы</Button.ToolTip>
                                         </Button>

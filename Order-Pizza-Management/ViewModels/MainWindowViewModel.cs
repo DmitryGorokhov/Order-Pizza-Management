@@ -182,17 +182,16 @@ namespace Order_Pizza_Management.ViewModels
 
             availableIngredients = dbo.GetAvailableIngredients();
             ShownIngredients = new ObservableCollection<Ingredient>(availableIngredients.ToList());
-
             availablePizza = dbo.GetAvailablePizza();
             ShownPizza = new ObservableCollection<Pizza>(availablePizza.ToList());
+            ingrCountBeforeCustom = new List<int>();
 
             Types = dbo.GetIngredientTypes();
-            allCompositionStrings = dbo.GetAllCompositionString();
+            allCompositionStrings = new List<PizzaCompositionString>();
             deletedCompositionStrings = new List<PizzaCompositionString>();
-
-            AllPizza = dbo.GetAllPizza();
-            Ingredients = dbo.GetAllIngredients();
-
+            AllPizza = new ObservableCollection<Pizza>();
+            Ingredients = new ObservableCollection<Ingredient>();
+            
             Composition = new ObservableCollection<PizzaCompositionString>();
             OrderStrings = new ObservableCollection<OrderString>();
         }
@@ -324,12 +323,13 @@ namespace Order_Pizza_Management.ViewModels
                         {
                             Composition.Clear();
                             CustomPizzaCost = 0;
-                            for (int i = 0; i < availableIngredients.Count; i++)
-                            {
-                                availableIngredients[i].CountStock = ingrCountBeforeCustom[i];
-                                if (availableIngredients[i].CountStock > 0)
-                                    availableIngredients[i].InStock = true;
-                            }
+                            if (ingrCountBeforeCustom.Count() != 0)
+                                for (int i = 0; i < availableIngredients.Count; i++)
+                                {
+                                    availableIngredients[i].CountStock = ingrCountBeforeCustom[i];
+                                    if (availableIngredients[i].CountStock > 0)
+                                        availableIngredients[i].InStock = true;
+                                }
                             ShownIngredients = new ObservableCollection<Ingredient>(availableIngredients.Select(i => i).Where(i => i.InStock).ToList());
                             OnPropertyChanged("ShownIngredients");
                             CustomVisibility = Visibility.Hidden;
@@ -713,8 +713,21 @@ namespace Order_Pizza_Management.ViewModels
                             {
                                 LogOutVisibility = Visibility.Hidden;
                                 LogInVisibility = Visibility.Visible;
-                                // init collections
-                                // soon ...
+
+                                SelectedPizza = null;
+                                SelectedIngredient = null;
+                                allCompositionStrings = dbo.GetAllCompositionString();
+                                AllPizza = dbo.GetAllPizza();
+                                Ingredients = dbo.GetAllIngredients();
+                                CustomPizzaCost = 0;
+                                OrderCost = 0;
+                                SelectedCount = 1;
+                                OrderStrings.Clear();
+                                Composition.Clear();
+                                OnPropertyChanged("AllPizza");
+                                OnPropertyChanged("Ingredients");
+                                OnPropertyChanged("Composition");
+                                OnPropertyChanged("OrderStrings");
                             }
                             else ds.ShowMessage("Указанный пароль неверен. Повторите попытку.");
                         }
@@ -732,8 +745,20 @@ namespace Order_Pizza_Management.ViewModels
                     {
                         LogInVisibility = Visibility.Hidden;
                         LogOutVisibility = Visibility.Visible;
-                        // init collections
-                        // soon ...
+
+                        SelectedPizza = null;
+                        SelectedIngredient = null;
+                        availableIngredients = dbo.GetAvailableIngredients();
+                        ShownIngredients = new ObservableCollection<Ingredient>(availableIngredients.ToList());
+                        availablePizza = dbo.GetAvailablePizza();
+                        ShownPizza = new ObservableCollection<Pizza>(availablePizza.ToList());
+                        CustomPizzaCost = 0;
+                        OrderCost = 0;
+                        SelectedCount = 1;
+                        Composition.Clear();
+                        OnPropertyChanged("ShownPizza");
+                        OnPropertyChanged("ShownIngredients");
+                        OnPropertyChanged("Composition");
                     }));
             }
         }
