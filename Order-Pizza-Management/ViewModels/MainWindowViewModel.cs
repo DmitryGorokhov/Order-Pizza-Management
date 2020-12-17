@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -45,7 +46,6 @@ namespace Order_Pizza_Management.ViewModels
             }
         }
 
-
         private Visibility logOutVisibility = Visibility.Visible;
         public Visibility LogOutVisibility
         {
@@ -54,6 +54,17 @@ namespace Order_Pizza_Management.ViewModels
             {
                 logOutVisibility = value;
                 OnPropertyChanged("LogOutVisibility");
+            }
+        }
+
+        private DateTime period = DateTime.Now;
+        public DateTime Period
+        {
+            get { return period; }
+            set
+            {
+                period = value;
+                OnPropertyChanged("Period");
             }
         }
 
@@ -174,11 +185,13 @@ namespace Order_Pizza_Management.ViewModels
 
         private DbOperations dbo;
         private DialogService ds;
+        private FileService fs;
 
         public MainWindowViewModel()
         {
             dbo = new DbOperations();
             ds = new DialogService();
+            fs = new FileService();
 
             availableIngredients = dbo.GetAvailableIngredients();
             ShownIngredients = new ObservableCollection<Ingredient>(availableIngredients.ToList());
@@ -421,9 +434,64 @@ namespace Order_Pizza_Management.ViewModels
                 return exportReport ??
                     (exportReport = new RelayCommand(obj =>
                     {
-                        // soon...
+                        try
+                        {
+                            FullReportData fullReportData = PrepareReportData(period);
+
+                            if (fullReportData != null)
+                            {
+                                string title = $"Отчет за {period.Month}.{period.Year} от {DateTime.Now.ToShortDateString()}";
+                                if (ds.SaveFileDialog(title))
+                                {
+                                    fs.WriteReportData(ds.FilePath, fullReportData, title);
+                                    ds.ShowMessage("Файл сохранен");
+                                }
+                            }
+                            else ds.ShowMessage("Нет данных за выбранный месяц");
+                        }
+                        catch (NullReferenceException)
+                        {
+                            ds.ShowMessage("Период не выбран.");
+                        }
+                        catch
+                        {
+                            ds.ShowMessage("При подготовке отчета произошла ошибка. Повторите попытку.");
+                        }
                     }));
             }
+        }
+
+        private FullReportData PrepareReportData(DateTime period)
+        {
+            FullReportData fullReportData = new FullReportData();
+            List<Order> orders = dbo.GetOrdersByPeriod(period);
+
+            if (orders.Count == 0)
+                return null;
+
+            double maxCost = 0, sumCost = 0, minCost = double.MaxValue;
+
+            fullReportData.OrderData = new List<ReportOrderData>();
+            foreach (Order o in orders)
+            {
+                string s = dbo.GetOrderCompositionStringByOrderId(o.Id);
+                if (o.Cost < minCost) minCost = o.Cost;
+                else if (o.Cost > maxCost) maxCost = o.Cost;
+                sumCost += o.Cost;
+
+                fullReportData.OrderData.Add(new ReportOrderData()
+                {
+                    Id = o.Id,
+                    CreatedAtShortDate = o.CreatedAt.ToShortDateString(),
+                    OrderComposition = s,
+                    Cost = o.Cost,
+                });
+            }
+            fullReportData.MaxCost = maxCost;
+            fullReportData.MinCost = minCost;
+            fullReportData.OrderCount = orders.Count;
+            fullReportData.SumCost = sumCost;
+            return fullReportData;
         }
 
         private void AddInOrder(Pizza pizza, int count)
@@ -689,7 +757,7 @@ namespace Order_Pizza_Management.ViewModels
                             OnPropertyChanged("Composition");
                             SelectedIngredient = null;
                         }
-                        catch (System.NullReferenceException)
+                        catch (NullReferenceException)
                         {
                             ds.ShowMessage("Ингредиент не был выбран.");
                         }

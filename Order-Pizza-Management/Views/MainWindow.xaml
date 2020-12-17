@@ -32,18 +32,25 @@
                             <TextBlock Text="Заказ" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
                         </StackPanel>
                     </Button>
-                    <Button Visibility="{Binding LogInVisibility}" Background="#E99787" BorderBrush="{x:Null}"  Margin="24 12" >
+                    
+                    <StackPanel Margin="24 12" Visibility="{Binding LogInVisibility}">
+                        <Button Background="#E99787" BorderBrush="{x:Null}" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="4"/>
+                                <TextBlock Text="Управление" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                            </StackPanel>
+                        </Button>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="4"/>
-                            <TextBlock Text="Управление" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                            <TextBlock Text="Выберите месяц" Foreground="White" FontSize="16" Margin="4"/>
+                            <DatePicker DisplayDate="{Binding Period}" Width="20" Margin="12,4,4,4" BorderBrush="#E99787" Focusable="False"/>
                         </StackPanel>
-                    </Button>
-                    <Button Visibility="{Binding LogInVisibility}" Background="#E99787" BorderBrush="{x:Null}"  Margin="24,12,23.769,12" Command="{Binding ExportReport}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="File" VerticalAlignment="Center" Margin="4"/>
-                            <TextBlock Text="Отчеты" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
-                        </StackPanel>
-                    </Button>
+                        <Button Background="#E99787" BorderBrush="{x:Null}"   Command="{Binding ExportReport}" Margin="0,8">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="File" VerticalAlignment="Center" Margin="4"/>
+                                <TextBlock Text="Выгрузить отчет" FontSize="16" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <StackPanel Visibility="{Binding LogInVisibility}">

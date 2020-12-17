@@ -21,7 +21,6 @@ C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\MainWindow.g.cs
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\MainWindow.baml
-C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Order-Pizza-Management.csprojAssemblyReference.cache
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\Debug\Xceed.Wpf.AvalonDock.dll
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Aero.dll
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Metro.dll

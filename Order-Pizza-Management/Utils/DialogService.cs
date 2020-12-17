@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Windows;
 using Order_Pizza_Management.Views;
+using System;
 
 namespace Order_Pizza_Management.Utils
 {
@@ -11,9 +12,11 @@ namespace Order_Pizza_Management.Utils
         public string Address { get; set; }
         public string Password { get; set; }
 
-        public bool SaveFileDialog()
+        public bool SaveFileDialog(string name)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV files(*.csv)|*.csv";
+            saveFileDialog.FileName = name;
             if (saveFileDialog.ShowDialog() == true)
             {
                 FilePath = saveFileDialog.FileName;

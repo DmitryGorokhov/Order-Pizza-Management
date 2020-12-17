@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -149,6 +150,25 @@ namespace Order_Pizza_Management.Models
             PizzaCompositionString c = db.PizzaCompositionString.Where(i => i.Id == cs.Id).FirstOrDefault();
             db.PizzaCompositionString.Remove(c);
             db.SaveChanges();
+        }
+
+        public List<Order> GetOrdersByPeriod(DateTime period)
+        {
+            return db.Order
+                .Where(i => i.CreatedAt.Month == period.Month &&
+                i.CreatedAt.Year == period.Year).ToList();
+        }
+
+        public string GetOrderCompositionStringByOrderId(int orderId)
+        {
+            string s = "";
+            var res = db.OrderString
+                .Where(i => i.Order_FK == orderId)
+                .Select(i => new { i.Pizza.Name, i.Count })
+                .ToList();
+            foreach (var item in res)
+                s = $"{s} {item.Name} {item.Count}.";
+            return s;
         }
     }
 }
