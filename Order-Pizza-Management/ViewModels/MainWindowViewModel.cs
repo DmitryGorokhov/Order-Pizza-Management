@@ -219,8 +219,12 @@ namespace Order_Pizza_Management.ViewModels
                     {
                         try
                         {
-                            AddInOrder(selectedPizza, selectedCount);
-                            SelectedCount = 1;
+                            if (CanAddPizzaInOrder(selectedPizza.Id, selectedCount))
+                            {
+                                AddInOrder(selectedPizza, selectedCount);
+                                SelectedCount = 1;
+                            }
+                            else ds.ShowMessage("Невозможно добавить выбранное количество пицц.");
                         }
                         catch (System.NullReferenceException)
                         {
@@ -232,6 +236,19 @@ namespace Order_Pizza_Management.ViewModels
                         }
                     }));
             }
+        }
+
+        private bool CanAddPizzaInOrder(int pizzaId, int count)
+        {
+            List<int> ingrIds = dbo.GetIngredientsIdByPizzaId(pizzaId);
+            foreach (int id in ingrIds)
+            {
+                Ingredient ingr = availableIngredients
+                    .Where(i => i.Id == id).FirstOrDefault();
+                if (ingr == null || ingr.CountStock < count)
+                    return false;
+            }
+            return true;
         }
 
         private RelayCommand addIngredientInPizza;
