@@ -43,3 +43,4 @@ C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\EnterOrderDataWindow.baml
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\LogInWindow.g.cs
 C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Views\LogInWindow.baml
+C:\Users\Сергей\Desktop\Order-Pizza-Management\Order-Pizza-Management\obj\Debug\Order-Pizza-Management.csprojAssemblyReference.cache

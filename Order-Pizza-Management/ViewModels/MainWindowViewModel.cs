@@ -421,7 +421,7 @@ namespace Order_Pizza_Management.ViewModels
                             }
                         }
                         else
-                            ds.ShowMessage("Заказ пуст. Добавьте пиццу из меню или пользовательскую пиццу и попробуйте снова.");
+                            ds.ShowMessage("Заказ пуст. Добавьте в заказ пиццу из меню или пользовательскую пиццу.");
                     }));
             }
         }
@@ -623,9 +623,8 @@ namespace Order_Pizza_Management.ViewModels
                         try
                         {
                             if (SelectedType != null)
-                            {
                                 selectedIngredient.Type_FK = selectedType.Id;
-                            }
+                            else ds.ShowMessage("Тип ингредиента не выбран.");
                             dbo.UpdateIngredient(selectedIngredient);
                             if (selectedIngredient.InStock)
                             {
@@ -640,13 +639,14 @@ namespace Order_Pizza_Management.ViewModels
                                         {
                                             AllPizza[i].InStock = val;
                                             dbo.UpdatePizza(AllPizza[i]);
-                                            
                                         }
                                     }
                                 }
                             }
                             OnPropertyChanged("Ingredients");
                             OnPropertyChanged("AllPizza");
+                            ShownIngredients = new ObservableCollection<Ingredient>(Ingredients.Where(i => i.IsVisible).ToList());
+                            OnPropertyChanged("ShownIngredients");
                         }
                         catch
                         {
@@ -789,12 +789,14 @@ namespace Order_Pizza_Management.ViewModels
                                 allCompositionStrings = dbo.GetAllCompositionString();
                                 AllPizza = dbo.GetAllPizza();
                                 Ingredients = dbo.GetAllIngredients();
+                                ShownIngredients = new ObservableCollection<Ingredient>(Ingredients.Where(i => i.IsVisible).ToList());
                                 CustomPizzaCost = 0;
                                 OrderCost = 0;
                                 SelectedCount = 1;
                                 OrderStrings.Clear();
                                 Composition.Clear();
                                 OnPropertyChanged("AllPizza");
+                                OnPropertyChanged("ShownIngredients");
                                 OnPropertyChanged("Ingredients");
                                 OnPropertyChanged("Composition");
                                 OnPropertyChanged("OrderStrings");

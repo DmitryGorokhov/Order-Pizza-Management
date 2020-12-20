@@ -20,7 +20,7 @@
         </StackPanel>
         <StackPanel Margin="2,4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button Click="AcceptButton_Click" Content="Ок" Margin="4,0,8,0" Background="#727077" BorderBrush="{x:Null}" Height="28">
-                <Button.ToolTip>Подтврдить введенные данные</Button.ToolTip>
+                <Button.ToolTip>Подтвердить введенные данные</Button.ToolTip>
             </Button>
             <Button Click="CancelButton_Click" Content="Отмена" Margin="8,0,4,0" Background="#727077" BorderBrush="{x:Null}" Height="28">
                 <Button.ToolTip>Вернуться к формированию заказа</Button.ToolTip>
