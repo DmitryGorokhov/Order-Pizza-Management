@@ -13,6 +13,7 @@ namespace Order_Pizza_Management.Models
         public Order()
         {
             OrderString = new HashSet<OrderString>();
+            CreatedAt = DateTime.Now;
         }
 
         public int Id { get; set; }
