@@ -209,6 +209,55 @@ namespace Order_Pizza_Management.ViewModels
             OrderStrings = new ObservableCollection<OrderString>();
         }
 
+        private RelayCommand switchToMenu;
+        public RelayCommand SwitchToMenu
+        {
+            get
+            {
+                return switchToMenu ??
+                    (switchToMenu = new RelayCommand(obj =>
+                    {
+                        if (Composition.Count == 0 || ds.AcceptionDialog())
+                        {
+                            Composition.Clear();
+                            CustomPizzaCost = 0;
+                            if (ingrCountBeforeCustom.Count() != 0)
+                                for (int i = 0; i < availableIngredients.Count; i++)
+                                {
+                                    availableIngredients[i].CountStock = ingrCountBeforeCustom[i];
+                                    if (availableIngredients[i].CountStock > 0)
+                                        availableIngredients[i].InStock = true;
+                                }
+                            ShownIngredients = new ObservableCollection<Ingredient>(availableIngredients.Select(i => i).Where(i => i.InStock).ToList());
+                            OnPropertyChanged("ShownIngredients");
+                            CustomVisibility = Visibility.Hidden;
+                            MenuVisibility = Visibility.Visible;
+                            SelectedPizza = null;
+                            SelectedIngredient = null;
+                        }
+                    }));
+            }
+        }
+
+        private RelayCommand switchToCustom;
+        public RelayCommand SwitchToCustom
+        {
+            get
+            {
+                return switchToCustom ??
+                    (switchToCustom = new RelayCommand(obj =>
+                    {
+                        MenuVisibility = Visibility.Hidden;
+                        CustomVisibility = Visibility.Visible;
+                        ingrCountBeforeCustom = new List<int>();
+                        foreach (Ingredient i in availableIngredients)
+                            ingrCountBeforeCustom.Add(i.CountStock);
+                        SelectedPizza = null;
+                        SelectedIngredient = null;
+                    }));
+            }
+        }
+
         private RelayCommand addPizzaInOrder;
         public RelayCommand AddPizzaInOrder
         {
@@ -226,7 +275,7 @@ namespace Order_Pizza_Management.ViewModels
                             }
                             else ds.ShowMessage("Невозможно добавить выбранное количество пицц.");
                         }
-                        catch (System.NullReferenceException)
+                        catch (NullReferenceException)
                         {
                             ds.ShowMessage("Пицца не была выбрана.");
                         }
@@ -249,6 +298,44 @@ namespace Order_Pizza_Management.ViewModels
                     return false;
             }
             return true;
+        }
+
+        private RelayCommand addCustomPizza;
+        public RelayCommand AddCustomPizza
+        {
+            get
+            {
+                return addCustomPizza ??
+                    (addCustomPizza = new RelayCommand(obj =>
+                    {
+                        if (Composition.Count != 0)
+                        {
+                            Pizza customPizza = new Pizza()
+                            {
+                                Name = "Пользовательская",
+                                InStock = true,
+                                IsCustom = true,
+                                Price = CustomPizzaCost,
+                            };
+
+                            int id = dbo.AddPizza(customPizza);
+
+                            foreach (PizzaCompositionString cs in Composition)
+                            {
+                                cs.Pizza_FK = id;
+                                dbo.AddCompositionString(cs);
+                            }
+                            Composition.Clear();
+                            AddInOrder(customPizza, 1);
+                            CustomPizzaCost = 0;
+                            ingrCountBeforeCustom.Clear();
+                            foreach (Ingredient i in availableIngredients)
+                                ingrCountBeforeCustom.Add(i.CountStock);
+                        }
+                        else
+                            ds.ShowMessage("Пользовательская пицца пуста. Добавьте ингредиенты и попробуйте снова.");
+                    }));
+            }
         }
 
         private RelayCommand addIngredientInPizza;
@@ -302,94 +389,7 @@ namespace Order_Pizza_Management.ViewModels
             });
             return i.Price * count;
         }
-
-        private RelayCommand addCustomPizza;
-        public RelayCommand AddCustomPizza
-        {
-            get
-            {
-                return addCustomPizza ??
-                    (addCustomPizza = new RelayCommand(obj =>
-                    {
-                        if (Composition.Count != 0)
-                        {
-                            Pizza customPizza = new Pizza()
-                            {
-                                Name = "Пользовательская",
-                                InStock = true,
-                                IsCustom = true,
-                                Price = CustomPizzaCost,
-                            };
-
-                            int id = dbo.AddPizza(customPizza);
-
-                            foreach (PizzaCompositionString cs in Composition)
-                            {
-                                cs.Pizza_FK = id;
-                                dbo.AddCompositionString(cs);
-                            }
-                            Composition.Clear();
-                            AddInOrder(customPizza, 1);
-                            CustomPizzaCost = 0;
-                            ingrCountBeforeCustom.Clear();
-                            foreach (Ingredient i in availableIngredients)
-                                ingrCountBeforeCustom.Add(i.CountStock);
-                        }
-                        else
-                            ds.ShowMessage("Пользовательская пицца пуста. Добавьте ингредиенты и попробуйте снова.");
-                    }));
-            }
-        }
-
-        private RelayCommand switchToMenu;
-        public RelayCommand SwitchToMenu
-        {
-            get
-            {
-                return switchToMenu ??
-                    (switchToMenu = new RelayCommand(obj =>
-                    {
-                        if (Composition.Count == 0 || ds.AcceptionDialog())
-                        {
-                            Composition.Clear();
-                            CustomPizzaCost = 0;
-                            if (ingrCountBeforeCustom.Count() != 0)
-                                for (int i = 0; i < availableIngredients.Count; i++)
-                                {
-                                    availableIngredients[i].CountStock = ingrCountBeforeCustom[i];
-                                    if (availableIngredients[i].CountStock > 0)
-                                        availableIngredients[i].InStock = true;
-                                }
-                            ShownIngredients = new ObservableCollection<Ingredient>(availableIngredients.Select(i => i).Where(i => i.InStock).ToList());
-                            OnPropertyChanged("ShownIngredients");
-                            CustomVisibility = Visibility.Hidden;
-                            MenuVisibility = Visibility.Visible;
-                            SelectedPizza = null;
-                            SelectedIngredient = null;
-                        }
-                    }));
-            }
-        }
-
-        private RelayCommand switchToCustom;
-        public RelayCommand SwitchToCustom
-        {
-            get
-            {
-                return switchToCustom ??
-                    (switchToCustom = new RelayCommand(obj =>
-                    {
-                        MenuVisibility = Visibility.Hidden;
-                        CustomVisibility = Visibility.Visible;
-                        ingrCountBeforeCustom = new List<int>();
-                        foreach (Ingredient i in availableIngredients)
-                            ingrCountBeforeCustom.Add(i.CountStock);
-                        SelectedPizza = null;
-                        SelectedIngredient = null;
-                    }));
-            }
-        }
-
+        
         private RelayCommand finishOrdering;
         public RelayCommand FinishOrdering
         {
@@ -549,6 +549,7 @@ namespace Order_Pizza_Management.ViewModels
                 if(pizzaIDs.Contains(availablePizza[i].Id))
                     availablePizza[i].InStock = false;
         }
+
         private bool Validate(string address, string phoneNumber)
         {
             if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(address))
@@ -744,9 +745,10 @@ namespace Order_Pizza_Management.ViewModels
                                 }
                             }
                             deletedCompositionStrings.Clear();
-                            changingPizza.Price = cpizzaCost;
-                            changingPizza.InStock = GetPizzaStock(changingPizza.Id);
-                            dbo.UpdatePizza(changingPizza);
+                            int ind = AllPizza.IndexOf(changingPizza);
+                            AllPizza[ind].Price = cpizzaCost;
+                            AllPizza[ind].InStock = GetPizzaStock(AllPizza[ind].Id);
+                            dbo.UpdatePizza(AllPizza[ind]);
                             allCompositionStrings = dbo.GetAllCompositionString();
                             OnPropertyChanged("AllPizza");
                         }
