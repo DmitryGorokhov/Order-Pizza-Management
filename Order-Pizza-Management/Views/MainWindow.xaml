@@ -416,7 +416,6 @@
                                                             <TextBlock FontSize="16" Margin="4" Text="Количество на складе: " />
                                                             <TextBlock FontSize="16" Margin="0 4" Text="{Binding Path=CountStock}" />
                                                         </StackPanel>
-                                                        <CheckBox IsEnabled="False" IsChecked="{Binding Path=InStock}" Content="В наличии" Margin="4" FontSize="16"/>
                                                         <CheckBox IsChecked="{Binding Path=IsVisible}" Content="Видимый" Margin="4" FontSize="16"/>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -444,7 +443,7 @@
                                         
                                         <CheckBox IsChecked="{Binding Path=IsVisible, UpdateSourceTrigger=PropertyChanged}" Content="Видимый" Margin="4" FontSize="14"/>
                                         </StackPanel>
-                                        <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Value" Margin="4" FontSize="14" />
+                                        <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedIngredient.IngredientType, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Value" Margin="4" FontSize="14" />
                                         <Button Content="Применить изменения" Margin="4,16" Background="#727077" BorderBrush="{x:Null}" Command="{Binding UpdateSelectedIngr}">
                                             <Button.ToolTip>Сохранить изменения для выбранного ингредиента</Button.ToolTip>
                                         </Button>

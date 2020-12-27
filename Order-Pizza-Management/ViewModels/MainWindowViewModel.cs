@@ -152,17 +152,6 @@ namespace Order_Pizza_Management.ViewModels
             }
         }
 
-        private IngredientType selectedType;
-        public IngredientType SelectedType
-        {
-            get { return selectedType; }
-            set
-            {
-                selectedType = value;
-                OnPropertyChanged("SelectedType");
-            }
-        }
-
         private List<PizzaCompositionString> allCompositionStrings;
         private List<PizzaCompositionString> deletedCompositionStrings;
 
@@ -402,12 +391,12 @@ namespace Order_Pizza_Management.ViewModels
                         {
                             if (ds.EnterOrderDataDialog())
                             {
-                                if (Validate(ds.Address, ds.PhoneNubmber))
+                                if (Validate(ds.Address, ds.PhoneNumber))
                                 {
                                     Order order = new Order()
                                     {
                                         Address = ds.Address,
-                                        PhoneNumber = ds.PhoneNubmber,
+                                        PhoneNumber = ds.PhoneNumber,
                                         Cost = OrderCost
                                     };
                                     int orderId = dbo.AddOrder(order);
@@ -640,9 +629,6 @@ namespace Order_Pizza_Management.ViewModels
                     {
                         try
                         {
-                            if (SelectedType != null)
-                                selectedIngredient.Type_FK = selectedType.Id;
-                            else ds.ShowMessage("Тип ингредиента не выбран.");
                             dbo.UpdateIngredient(selectedIngredient);
                             if (selectedIngredient.InStock)
                             {
@@ -700,10 +686,14 @@ namespace Order_Pizza_Management.ViewModels
                         try
                         {
                             Composition = new ObservableCollection<PizzaCompositionString>(Composition
-                            .Where(i => i.Id != selectedCompositionItem.Id).ToList());
+                            .Where(i => i != selectedCompositionItem).ToList());
                             deletedCompositionStrings.Add(selectedCompositionItem);
                             CustomPizzaCost = cpizzaCost - selectedCompositionItem.Ingredient.Price * selectedCompositionItem.Count;
                             OnPropertyChanged("Composition");
+                        }
+                        catch (NullReferenceException)
+                        {
+                            ds.ShowMessage("Строка состава не выбрана. Попробуйте снова.");
                         }
                         catch
                         {
@@ -740,9 +730,7 @@ namespace Order_Pizza_Management.ViewModels
                                     dbo.DeleteCompositionString(cs);
                                 }
                                 catch
-                                {
-                                    ds.ShowMessage("Произошла ошибка при удалении выбранного элемента. Попробуйте снова.");
-                                }
+                                { }
                             }
                             deletedCompositionStrings.Clear();
                             int ind = AllPizza.IndexOf(changingPizza);
